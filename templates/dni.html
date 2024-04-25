@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+</head>
+<body>
+    <h1>Obtener datos de persona por DNI</h1>
+    <form action="{{ url_for('predios.obtener_datos') }}" method="POST">
+        <label for="dato_input"> Ingresa tu DNI : </label> <br><br>
+        <input type="text" name="dato_input" id="dato_input">
+        <button type="submit">Enviar</button>
+    </form>
+    {% if datos is not none %}
+    <ul>
+        <li><strong>Número:</strong> {{ datos['numero'] }}</li>
+        <li><strong>Nombre Completo:</strong> {{ datos['nombre_completo'] }}</li>
+        <li><strong>Nombres:</strong> {{ datos['nombres'] }}</li>
+        <li><strong>Apellido Paterno:</strong> {{ datos['apellido_paterno'] }}</li>
+        <li><strong>Apellido Materno:</strong> {{ datos['apellido_materno'] }}</li>
+        <li><strong>Código de Verificación:</strong> {{ datos['codigo_verificacion'] }}</li>
+    </ul>
+    <a href="{{ url_for('predios.obtener_datos') }}"><button>Regresar</button></a>
+    {% endif %}
+
+
+</body>
+</html>

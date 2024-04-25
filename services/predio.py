@@ -2,6 +2,8 @@ from flask import Blueprint, request, jsonify
 from model.predio import Predio
 from utils.db import db
 from flask import render_template,redirect, url_for
+import json
+import requests
 
 predios =Blueprint('predios',__name__)
 
@@ -10,6 +12,49 @@ def getMensaje():
     result={}
     result["data"]='flask-crud-backend'
     return jsonify(result)
+
+@predios.route('/predios/v1/obtener-datos', methods=['POST',"GET"])
+def obtener_datos():
+    if request.method == 'GET':
+        return render_template('dni.html', datos=None)
+    
+    dato_input = request.form['dato_input']
+    # Aquí puedes hacer lo que quieras con los datos obtenidos, como imprimirlos o procesarlos de alguna manera.
+    #Definir el número de DNI y el token de autorización
+    dni = dato_input 
+    token = "bae023f136b094b6dfa7872343f370e2e9e7036ff927dfdbeaa483202c5f1fe6"
+
+    # URL de la API
+    url = "https://apiperu.dev/api/dni"
+
+    # Construir el payload como un diccionario
+    payload = {
+        "dni": dni
+    }
+
+    # Convertir el payload a formato JSON
+    params = json.dumps(payload)
+
+    # Configurar los encabezados de la solicitud
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {token}"
+    }
+
+    # Realizar la solicitud POST
+    response = requests.post(url, data=params, headers=headers)
+
+    # Verificar el estado de la respuesta
+    if response.status_code == 200:
+        # La solicitud fue exitosa
+        data = response.json()
+        dataPass = data["data"]
+        return render_template('dni.html', datos=dataPass)
+    else:
+        # Hubo un error en la solicitud
+        return render_template('dni.html', datos=None)
+
 
 @predios.route('/predios/v1/listartabla', methods=['GET'])
 def listartabla():
