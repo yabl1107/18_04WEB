@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from model.predio import Predio
 from utils.db import db
-
+from flask import render_template,redirect, url_for
 
 predios =Blueprint('predios',__name__)
 
@@ -10,6 +10,12 @@ def getMensaje():
     result={}
     result["data"]='flask-crud-backend'
     return jsonify(result)
+
+@predios.route('/predios/v1/listartabla', methods=['GET'])
+def listartabla():
+    predios = Predio.query.all()  
+    return render_template('data.html', predios=predios)
+
 
 @predios.route('/predios/v1/listar',methods=['GET'])
 def getContactos():
